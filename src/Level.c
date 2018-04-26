@@ -1,4 +1,5 @@
 #include "rog.h"
+#include "utils.h"
 
 /*#############################################################################
 #	LEVEL FUNCTIONS
@@ -38,6 +39,7 @@ Room** roomsSetup()
 		drawRoom(rooms[x]);
 	}
 
+	pathFind(rooms[0]->door[3], rooms[4]->door[2]);
 	//Create paths, hardcoded for now
 	/*
 	connectDoors(rooms[1]->door[2], rooms[0]->door[0]);
@@ -52,11 +54,11 @@ char ** saveLevelPositions()
 	int x, y;
 
 	char ** positions;
-	positions = malloc((sizeof(char*))*25);
+	positions = malloc((sizeof(char*))*GLOBAL_MAX_HEIGHT);
 
 	for(y = 0; y<25; y++)
 	{
-		positions[y] = malloc(sizeof(char) * 100);
+		positions[y] = malloc(sizeof(char) * GLOBAL_MAX_WIDTH);
 		for (x = 0; x<100; x++)
 		{
 			positions[y][x] = mvinch(y,x);

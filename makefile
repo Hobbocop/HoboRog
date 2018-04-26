@@ -4,7 +4,8 @@ CFLAGS = -lpdcurses -I$(IDIR)
 IDIR = ./include/
 SRCDIR = ./src/
 
-SOURCES = $(SRCDIR)*.c
+SOURCES = 	$(SRCDIR)*.c\
+			$(SRCDIR)../utils/*.c
 
 all: rogue run
 

@@ -7,7 +7,7 @@
 int screenSetUp()
 {
 	initscr();
-	printw("Welcome to HoboRogue - Press q to quit\n");
+	printw("Welcome to HoboRogue (%d,%d) - Press q to quit\n", GLOBAL_MAX_WIDTH, GLOBAL_MAX_HEIGHT);
 	noecho();
 	refresh();
 

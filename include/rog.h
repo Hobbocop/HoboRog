@@ -6,6 +6,12 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define TRUE 1
+#define FALSE 0
+
+#define PATHFINDING_RANDOM 1
+#define PATHFINDING_SEEK 0
+
 
 /*#############################################################################
 #	Structs
@@ -36,10 +42,9 @@ typedef struct Player
 typedef struct Room
 {
 	Coords coords;	//X and Y coords of the top left corner
+	Coords** door;
 	int height;
 	int width;
-
-	Coords door[4];
 	// TODO - Create structs for monsters and items
 	//Monster** monsters;
 	//Item** items;
@@ -72,6 +77,14 @@ typedef struct Monster
 	int alive;		//1-yes, 0-no
 	int exp;
 } Monster;
+
+/*#############################################################################
+#	GLOBAL VARIABLES
+#############################################################################*/
+//Generally frowned upon, but these will be constant after having been set once
+int GLOBAL_MAX_HEIGHT;
+int GLOBAL_MAX_WIDTH;
+
 
 /*#############################################################################
 #	Functions
