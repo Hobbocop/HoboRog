@@ -3,7 +3,7 @@
 /*####################################################
 #	SCREEN FUNCTIONS
 ####################################################*/
-//Initalises pdcurses and sets up the screen.
+//Initializes pdcurses and sets up the screen.
 int screenSetUp()
 {
 	initscr();
