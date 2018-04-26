@@ -7,7 +7,7 @@
 int screenSetUp()
 {
 	initscr();
-	printw("Welcome to HoboRogue! Press q to quit\n");
+	printw("Welcome to HoboRogue - Press q to quit\n");
 	noecho();
 	refresh();
 

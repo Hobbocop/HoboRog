@@ -62,7 +62,7 @@ int addExp(Player* player, int xp)
 //Increments the players level and stats accordingly
 int levelUp(Player* player)
 {
-	mvprintw(2,0, "Level up! Stats have been increased!");
+	//mvprintw(2,0, "Level up! Stats have been increased!");
 	player->attack++;
 	player->maxHp+=10;
 	player->hp = player->maxHp;

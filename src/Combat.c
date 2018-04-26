@@ -18,7 +18,7 @@ int combat(Player* player, Monster* monster, int order)
 		{
 			killMonster(monster);
 			addExp(player, monster->exp);
-			mvprintw(1,0,"Hit %s for %d damage, %s dies!    ", monster->type, player->attack, monster->type);
+			//mvprintw(1,0,"Hit %s for %d damage, %s dies!    ", monster->type, player->attack, monster->type);
 			return 1;
 		}
 	}
@@ -32,7 +32,7 @@ int combat(Player* player, Monster* monster, int order)
 			monster->hp -= player->attack;
 		}
 	}
-	mvprintw(1,0,"Hit %s for %d damage, remaining hp: %d ", monster->type, player->attack, monster->hp);
+	//mvprintw(1,0,"Hit %s for %d damage, remaining hp: %d ", monster->type, player->attack, monster->hp);
 	move(player->position->y, player->position->x);
 
 	return 1;

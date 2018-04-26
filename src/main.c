@@ -25,6 +25,7 @@ int main()
 		moveMonsters(level);
 		printGameHud(level);
 		move(level->user->position->y, level->user->position->x);
+		refresh();
 	}
 
 	//getch();
