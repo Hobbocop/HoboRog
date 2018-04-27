@@ -103,6 +103,8 @@ int GLOBAL_MAX_WIDTH;
 
 //Screen functions - Screen.c
 int screenSetUp();
+void printFrame();
+void printInnerFrame();
 int printGameHud(Level* level);
 
 
@@ -110,11 +112,12 @@ int printGameHud(Level* level);
 Level * createLevel(int lvl);
 Room** roomsSetup();
 char** saveLevelPositions();
+void connectDoors(Level* level);
 
 //Room functions - Rooms.c
 Room* createRoom(int grid, int numberOfDoors);
 int drawRoom(Room* room);
-int connectDoors(Coords doorOne, Coords doorTwo);
+//int connectDoors(Coords doorOne, Coords doorTwo);
 
 //Input and movement functions - Player.c
 Coords handleInput(int input, Player* user);

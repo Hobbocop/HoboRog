@@ -9,7 +9,7 @@ Room* createRoom(int grid, int numberOfDoors)
 {
 	srand(time(NULL)+grid);
 
-	int i;
+	int i, top;
 	Room * newRoom;
 	newRoom = malloc(sizeof(Room));
 	newRoom->numberOfDoors = numberOfDoors;
@@ -20,14 +20,17 @@ Room* createRoom(int grid, int numberOfDoors)
 		case 0:
 			newRoom->coords.x=0;
 			newRoom->coords.y=1;
+			top = 1;
 			break;
 		case 1:
 			newRoom->coords.x=33;
 			newRoom->coords.y=1;
+			top = 1;
 			break;
 		case 2:
 			newRoom->coords.x=66;
 			newRoom->coords.y=1;
+			top = 1;
 			break;
 		case 3:
 			newRoom->coords.x=1;
@@ -43,13 +46,20 @@ Room* createRoom(int grid, int numberOfDoors)
 			break;
 	}
 
-	newRoom->height = (rand()%6) +4; //Max height 9
+	newRoom->height = (rand()%5) +4; //Max height 9
 	newRoom->width = (rand()%15) +4; //Max width 19
 
 	//Offset for the room position
-	newRoom->coords.x += (rand()%(30-newRoom->width));
-	newRoom->coords.y += (rand()%(10-newRoom->height));
-
+	if(top==TRUE)
+	{
+		newRoom->coords.x += (rand()%(30-newRoom->width) +2);
+		newRoom->coords.y += (rand()%(10-newRoom->height)+1);
+	}
+	else
+	{
+		newRoom->coords.x += (rand()%(30-newRoom->width)+2);
+		newRoom->coords.y += (rand()%(10-newRoom->height));
+	}
 
 	newRoom->door = malloc(sizeof(Door*)*numberOfDoors);
 
@@ -58,8 +68,6 @@ Room* createRoom(int grid, int numberOfDoors)
 		newRoom->door[i] = malloc(sizeof(Door));
 		newRoom->door[i]->connected = 0;
 	}
-
-
 
 	srand(time(NULL)+grid);
 	//A door at the top of the room
@@ -128,88 +136,6 @@ int drawRoom(Room* room)
 	for(i=0; i<4; i++)
 	{
 		mvprintw(room->door[i]->entrance.y, room->door[i]->entrance.x, "#");
-	}
-	return 1;
-}
-
-//Draws pathway between coordinates/doors
-int connectDoors(Coords doorOne, Coords doorTwo)
-{
-	Coords temp;
-	Coords prev;
-
-	int count = 0;
-	int step; //0 - left, 1 - right, 2 - down, 3 - up, 4 - n/A
-
-	temp.x = doorOne.x;
-	temp.y = doorOne.y;
-
-	prev = temp;
-
-	while(TRUE)
-	{
-		//Take a step, if closer and empty --- store new coords
-
-		//step left
-		if((abs((temp.x-1) - doorTwo.x) < abs(temp.x-doorTwo.x)) && (mvinch(temp.y, temp.x-1) == ' '))
-		{
-			step = 0;
-			prev.x = temp.x;
-			temp.x = temp.x-1;
-		}
-		//step right
-		else if((abs((temp.x+1) - doorTwo.x) < abs(temp.x-doorTwo.x)) && (mvinch(temp.y, temp.x+1) == ' '))
-		{
-			step = 1;
-			prev.x = temp.x;
-			temp.x = temp.x+1;
-		}
-		//step down
-		else if((abs((temp.y+1) - doorTwo.y) < abs(temp.y-doorTwo.y)) && (mvinch(temp.y+1, temp.x) == ' '))
-		{
-			step = 2;
-			prev.y = temp.y;
-			temp.y = temp.y+1;
-		}
-		//step up
-		else if((abs((temp.y-1) - doorTwo.y) < abs(temp.y-doorTwo.y)) && (mvinch(temp.y-1, temp.x) == ' '))
-		{
-			step = 3;
-			prev.y = temp.y;
-			temp.y = temp.y-1;
-		}
-		//Hit a snag,
-		else
-		{
-			//Are we there?
-			if((temp.x == doorTwo.x) && (temp.y+1 == doorTwo.y))
-				return 1;
-			else if((temp.x == doorTwo.x) && (temp.y-1 == doorTwo.y))
-				return 1;
-			else if((temp.x+1 == doorTwo.x) && (temp.y == doorTwo.y))
-				return 1;
-			else if((temp.x-1 == doorTwo.x) && (temp.y == doorTwo.y))
-				return 1;
-
-			//Then backtrack
-			else if(count == 0)
-			{
-				//mvprintw(2,0, "!Prev(%d,%d): \'%c\', temp(%d,%d): \'%c\'", prev.y,prev.x,mvinch(prev.y,prev.x), temp.y,temp.x,mvinch(temp.y,temp.x));
-				temp = prev;
-				count++;
-				continue;
-			}
-
-			//Already backtracked once, I'm lost
-			else
-			{
-				return 0;
-			}
-		}
-
-		//mvprintw(1,0, "Prev(%d,%d): \'%c\', temp(%d,%d): \'%c\'", prev.y,prev.x,mvinch(prev.y,prev.x), temp.y,temp.x,mvinch(temp.y,temp.x));
-		//getch();
-		mvprintw(temp.y, temp.x, "#");
 	}
 	return 1;
 }

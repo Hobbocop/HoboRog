@@ -11,7 +11,7 @@ int checkNeighbour(int y, int x)
 {
 	char temp = mvinch(y,x);
 
-	if(temp == '.' || temp=='|' || temp=='+')
+	if(temp == '.' || temp=='|' || temp=='+' || temp == '-')
 		return FALSE;
 	else
 		return TRUE;
@@ -132,5 +132,6 @@ void pathFind(Coords* start, Coords* end)
 		x = cameFrom[tempY][tempX][1];
 
 		mvprintw(y,x,"#");
+		//getch();
 	}
 }

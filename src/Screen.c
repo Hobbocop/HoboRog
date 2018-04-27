@@ -7,16 +7,66 @@
 int screenSetUp()
 {
 	initscr();
-	printw("Welcome to HoboRogue (%d,%d) - Press q to quit\n", GLOBAL_MAX_WIDTH, GLOBAL_MAX_HEIGHT);
+	noecho();
+	//printw("Welcome to HoboRogue (%d,%d) - Press q to quit\n", GLOBAL_MAX_WIDTH, GLOBAL_MAX_HEIGHT);
 
+	printFrame();
+	refresh();
+
+	return 1;
+}
+
+void printFrame()
+{
+	int x, y;
+
+	//Print top and bottom of active display
+	for(x = 0; x<GLOBAL_MAX_WIDTH; x++)
+	{
+		mvprintw(0, x, "-");
+		mvprintw(GLOBAL_MAX_HEIGHT, x, "-");
+	}
+
+	//Print edges of active display
+	for(y = 1; y < GLOBAL_MAX_HEIGHT; y++)
+	{
+		//Print actual walls
+		mvprintw(y, 0,"|");
+		mvprintw(y, GLOBAL_MAX_WIDTH, "|");
+	}
+
+	//Print the corners of the Active display
+	mvprintw(0,0, "+");
 	mvprintw(GLOBAL_MAX_HEIGHT, GLOBAL_MAX_WIDTH, "+");
 	mvprintw(0, GLOBAL_MAX_WIDTH, "+");
 	mvprintw(GLOBAL_MAX_HEIGHT, 0, "+");
 
-	noecho();
-	refresh();
+}
 
-	return 1;
+void printInnerFrame()
+{
+	int x, y;
+
+	//Print top and bottom of active display
+	for(x = 0; x<GLOBAL_MAX_WIDTH; x++)
+	{
+		mvprintw(1, x, "-");
+		mvprintw(GLOBAL_MAX_HEIGHT-1, x, "-");
+	}
+
+
+	for(y = 1; y < GLOBAL_MAX_HEIGHT; y++)
+	{
+		//Print inner walls
+		mvprintw(y, 1,"|");
+		mvprintw(y, GLOBAL_MAX_WIDTH-1, "|");
+	}
+
+	//Print the inner corners
+	mvprintw(1,1, "+");
+	mvprintw(GLOBAL_MAX_HEIGHT-1, GLOBAL_MAX_WIDTH-1, "+");
+	mvprintw(1, GLOBAL_MAX_WIDTH-1, "+");
+	mvprintw(GLOBAL_MAX_HEIGHT-1, 1, "+");
 }
 
 int printGameHud(Level* level)

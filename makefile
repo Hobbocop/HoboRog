@@ -5,7 +5,7 @@ IDIR = ./include/
 SRCDIR = ./src/
 
 SOURCES = 	$(SRCDIR)*.c\
-			$(SRCDIR)../utils/*.c
+			$(SRCDIR)./utils/*.c
 
 all: rogue
 
