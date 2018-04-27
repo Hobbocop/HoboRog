@@ -7,7 +7,7 @@ SRCDIR = ./src/
 SOURCES = 	$(SRCDIR)*.c\
 			$(SRCDIR)../utils/*.c
 
-all: rogue run
+all: rogue
 
 rogue:	$(SOURCES)
 	$(CC) $(SOURCES) $(CFLAGS) -o $@

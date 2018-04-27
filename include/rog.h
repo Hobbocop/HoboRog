@@ -42,13 +42,24 @@ typedef struct Player
 typedef struct Room
 {
 	Coords coords;	//X and Y coords of the top left corner
-	Coords** door;
+	//Coords** door;
 	int height;
 	int width;
+	int numberOfDoors;
+	struct Door** door;
+
 	// TODO - Create structs for monsters and items
 	//Monster** monsters;
 	//Item** items;
 } Room;
+
+//Struct to keep track of Doors, basically two Coords
+typedef struct Door
+{
+	int connected;
+	Coords entrance;
+	Coords exit;
+} Door;
 
 //Struct to keep track of level data (rooms) and stats
 typedef struct level
@@ -101,7 +112,7 @@ Room** roomsSetup();
 char** saveLevelPositions();
 
 //Room functions - Rooms.c
-Room* createRoom(int grid);
+Room* createRoom(int grid, int numberOfDoors);
 int drawRoom(Room* room);
 int connectDoors(Coords doorOne, Coords doorTwo);
 

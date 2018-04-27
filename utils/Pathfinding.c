@@ -7,10 +7,20 @@ void addPositionYX(int** frontier, int frontierCount, int y, int x)
 	frontier[frontierCount][1] = x;
 }
 
+int checkNeighbour(int y, int x)
+{
+	char temp = mvinch(y,x);
+
+	if(temp == '.' || temp=='|' || temp=='+')
+		return FALSE;
+	else
+		return TRUE;
+}
+
 int addNeighbours(int** frontier, int frontierCount, int*** cameFrom, int y, int x)
 {
 	//North Neighbour
-	if(y > 0 && cameFrom[y-1][x][0] < 0) //There exist a unvisited neighbor to the north
+	if(y > 0 && cameFrom[y-1][x][0] < 0 && checkNeighbour(y-1,x)) //There exist a unvisited neighbor to the north
 	{
 		//Expand frontier by adding this element
 		addPositionYX(frontier, frontierCount, y-1, x);
@@ -24,7 +34,7 @@ int addNeighbours(int** frontier, int frontierCount, int*** cameFrom, int y, int
 	}
 
 	//South Neighbour
-	if(y < (GLOBAL_MAX_HEIGHT-1) && cameFrom[y+1][x][0] < 0) //There exist a unvisited neighbor to the south
+	if(y < (GLOBAL_MAX_HEIGHT-1) && cameFrom[y+1][x][0] < 0 && checkNeighbour(y+1,x)) //There exist a unvisited neighbor to the south
 	{
 		addPositionYX(frontier, frontierCount, y+1, x);
 		frontierCount++;
@@ -33,7 +43,7 @@ int addNeighbours(int** frontier, int frontierCount, int*** cameFrom, int y, int
 	}
 
 	//West Neighbour
-	if(x > 0 && cameFrom[y][x-1][0] < 0) //There exist a unvisited neighbor to the west
+	if(x > 0 && cameFrom[y][x-1][0] < 0 && checkNeighbour(y,x-1)) //There exist a unvisited neighbor to the west
 	{
 		addPositionYX(frontier, frontierCount, y, x-1);
 		frontierCount++;
@@ -42,7 +52,7 @@ int addNeighbours(int** frontier, int frontierCount, int*** cameFrom, int y, int
 	}
 
 	//East Neighbour
-	if(x < (GLOBAL_MAX_WIDTH-1) && cameFrom[y][x+1][0] < 0) //There exist a neighbor to the east
+	if(x < (GLOBAL_MAX_WIDTH-1) && cameFrom[y][x+1][0] < 0 && checkNeighbour(y,x+1)) //There exist a neighbor to the east
 	{
 		addPositionYX(frontier, frontierCount, y, x+1);
 		frontierCount++;
@@ -58,6 +68,7 @@ void pathFind(Coords* start, Coords* end)
 	//Variables
 	int i, j;	//Index counters
 	int x, y;	//Temp variables for coords
+	int tempY, tempX;
 	int frontierIndex = 0;
 	int frontierCount = 0;
 	int** frontier = malloc(sizeof(int*) * (GLOBAL_MAX_HEIGHT * GLOBAL_MAX_WIDTH));
@@ -115,10 +126,11 @@ void pathFind(Coords* start, Coords* end)
 	//Backtrack along the trail of crumbs
 	while(y!=start->y || x!= start->x)
 	{
-		y = cameFrom[y][x][0];
-		x = cameFrom[y][x][1];
+		tempY = y;
+		tempX = x;
+		y = cameFrom[tempY][tempX][0];
+		x = cameFrom[tempY][tempX][1];
 
 		mvprintw(y,x,"#");
-		getch();
 	}
 }

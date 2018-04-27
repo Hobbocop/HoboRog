@@ -5,12 +5,14 @@
 #	ROOM FUNCTIONS
 #############################################################################*/
 //Initialises roooms and allocates memory
-Room* createRoom(int grid)
+Room* createRoom(int grid, int numberOfDoors)
 {
 	srand(time(NULL)+grid);
 
+	int i;
 	Room * newRoom;
 	newRoom = malloc(sizeof(Room));
+	newRoom->numberOfDoors = numberOfDoors;
 
 	//Based on which grid the room is on, it's going to have different coords
 	switch(grid)
@@ -49,31 +51,35 @@ Room* createRoom(int grid)
 	newRoom->coords.y += (rand()%(10-newRoom->height));
 
 
-	newRoom->door = malloc(sizeof(Coords)*4);
+	newRoom->door = malloc(sizeof(Coords)*numberOfDoors);
+
+	for(i = 0; i < numberOfDoors; i++)
+	{
+		newRoom->door[i] = malloc(sizeof(Door));
+		newRoom->door[i] = 0;
+	}
+
+
 
 	srand(time(NULL)+grid);
 	//A door at the top of the room
-	newRoom->door[0] = malloc(sizeof(Coords));
-	newRoom->door[0]->x = 1 + rand() % (newRoom->width - 2) + newRoom->coords.x;
-	newRoom->door[0]->y = newRoom->coords.y;
+	newRoom->door[0]->entrance.x = 1 + rand() % (newRoom->width - 2) + newRoom->coords.x;
+	newRoom->door[0]->entrance.y = newRoom->coords.y;
 
 	srand(time(NULL)+12+grid);
 	//A door at the bottom of the room
-	newRoom->door[1] = malloc(sizeof(Coords));
-	newRoom->door[1]->x = 1 + rand() % (newRoom->width - 2) + newRoom->coords.x;
-	newRoom->door[1]->y = newRoom->coords.y + newRoom->height;
+	newRoom->door[1]->entrance.x = 1 + rand() % (newRoom->width - 2) + newRoom->coords.x;
+	newRoom->door[1]->entrance.y = newRoom->coords.y + newRoom->height;
 
 	srand(time(NULL)+31);
 	//Left door
-	newRoom->door[2] = malloc(sizeof(Coords));
-	newRoom->door[2]->x = newRoom->coords.x;
-	newRoom->door[2]->y = 1 + rand() % (newRoom->height -2) + newRoom->coords.y;
+	newRoom->door[2]->entrance.x = newRoom->coords.x;
+	newRoom->door[2]->entrance.y = 1 + rand() % (newRoom->height -2) + newRoom->coords.y;
 
 	srand(time(NULL)+42-grid);
 	//Right door
-	newRoom->door[3] = malloc(sizeof(Coords));
-	newRoom->door[3]->x = newRoom->coords.x+ newRoom->width;
-	newRoom->door[3]->y = 1 + rand() % (newRoom->height -2) + newRoom->coords.y;
+	newRoom->door[3]->entrance.x = newRoom->coords.x+ newRoom->width;
+	newRoom->door[3]->entrance.y = 1 + rand() % (newRoom->height -2) + newRoom->coords.y;
 
 	return newRoom;
 }
@@ -121,7 +127,7 @@ int drawRoom(Room* room)
 	//Draw doors
 	for(i=0; i<4; i++)
 	{
-		mvprintw(room->door[i]->y, room->door[i]->x, "#");
+		mvprintw(room->door[i]->entrance.y, room->door[i]->entrance.x, "#");
 	}
 	return 1;
 }

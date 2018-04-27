@@ -35,11 +35,11 @@ Room** roomsSetup()
 	for(x=0; x<6; x++)
 	{
 		srand(time(NULL));
-		rooms[x] = createRoom(x);
+		rooms[x] = createRoom(x, 4);
 		drawRoom(rooms[x]);
 	}
 
-	pathFind(rooms[0]->door[3], rooms[4]->door[2]);
+	//pathFind(rooms[0]->door[3]->entrance, rooms[1]->door[2]->entrance);
 	//Create paths, hardcoded for now
 	/*
 	connectDoors(rooms[1]->door[2], rooms[0]->door[0]);
