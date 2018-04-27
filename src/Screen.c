@@ -8,11 +8,11 @@ int screenSetUp()
 {
 	initscr();
 	printw("Welcome to HoboRogue (%d,%d) - Press q to quit\n", GLOBAL_MAX_WIDTH, GLOBAL_MAX_HEIGHT);
-	/*
+
 	mvprintw(GLOBAL_MAX_HEIGHT, GLOBAL_MAX_WIDTH, "+");
 	mvprintw(0, GLOBAL_MAX_WIDTH, "+");
 	mvprintw(GLOBAL_MAX_HEIGHT, 0, "+");
-	*/
+
 	noecho();
 	refresh();
 

@@ -51,12 +51,12 @@ Room* createRoom(int grid, int numberOfDoors)
 	newRoom->coords.y += (rand()%(10-newRoom->height));
 
 
-	newRoom->door = malloc(sizeof(Coords)*numberOfDoors);
+	newRoom->door = malloc(sizeof(Door*)*numberOfDoors);
 
 	for(i = 0; i < numberOfDoors; i++)
 	{
 		newRoom->door[i] = malloc(sizeof(Door));
-		newRoom->door[i] = 0;
+		newRoom->door[i]->connected = 0;
 	}
 
 
