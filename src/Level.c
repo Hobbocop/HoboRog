@@ -109,6 +109,12 @@ void connectDoors(Level* level)
 	}
 }
 
+//Returns 1 if move is valid, I.E is a floor tile
+int validTileMove(int y, int x, char** tiles)
+{
+	return (tiles[y][x] == '.');
+}
+
 char ** saveLevelPositions()
 {
 	int x, y;

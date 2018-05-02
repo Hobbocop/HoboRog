@@ -113,6 +113,7 @@ void drawLevel(Level* level);
 Room** roomsSetup();
 char** saveLevelPositions();
 void connectDoors(Level* level);
+int validTileMove(int x, int y, char** tiles);
 
 //Room functions - Rooms.c
 Room* createRoom(int grid, int numberOfDoors);
@@ -137,8 +138,8 @@ int killMonster(Monster* monster);
 int setStartingPosition(Monster* monster, Room* room);
 int moveMonsters(Level* level);
 int drawMonster(Monster* monster);
-int pathfindingSeek(Coords* start, Coords* destination);
-int pathfindingRandom(Coords* start);
+int pathfindingSeek(Coords* start, Coords* destination, char ** tiles);
+int pathfindingRandom(Coords* position, Coords* target, char ** tiles);
 Monster* getMonsterAt(Coords position, Monster** monsters);
 
 //Combat functions - Combat.c
