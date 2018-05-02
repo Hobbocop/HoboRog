@@ -6,12 +6,17 @@
 
 int addMonsters(Level * level)
 {
-	int x;
+	int x = 0;
 	level->monsters = malloc(sizeof(Monster*)*6);
 	level->numberOfMonsters = 0;
 
 	srand(time(NULL));
 
+	level->monsters[level->numberOfMonsters] = selectMonster(level->lvl);
+			setStartingPosition(level->monsters[level->numberOfMonsters], level->rooms[3]);
+			level->numberOfMonsters++;
+
+	/*
 	for(x = 0; x<level->numberOfRooms;x++)
 	{
 		if(TRUE)//if((rand()%50)>=1)
@@ -20,10 +25,12 @@ int addMonsters(Level * level)
 			setStartingPosition(level->monsters[level->numberOfMonsters], level->rooms[x]);
 			level->numberOfMonsters++;
 		}
-	}
-	move(level->user->position->y, level->user->position->x);
+	}*/
+
+	//move(level->user->position->y, level->user->position->x);
 }
 
+//Used for monster generation, selects one type of monster to create
 Monster * selectMonster(int floorLevel)
 {
 	int monsterType;
@@ -34,7 +41,8 @@ Monster * selectMonster(int floorLevel)
 		case 1:
 		case 2:
 		case 3:
-			monsterType = (rand()%2) + 1;
+			//monsterType = (rand()%2) + 1;
+			monsterType=2;
 			break;
 		case 4:
 		case 5:
@@ -57,7 +65,9 @@ Monster * selectMonster(int floorLevel)
 	}
 }
 
-Monster* createMonster(char symbol, int health, int attack, int speed, int defense, int pathfinding, char* type, int xp)
+//Used for monster generation, creates and initializes structs to keep track of monsters
+Monster* createMonster(char symbol, int health, int attack,
+	int speed, int defense, int pathfinding, char* type, int xp)
 {
 	Monster* newMonster;
 	newMonster = malloc(sizeof(Monster));
@@ -75,10 +85,9 @@ Monster* createMonster(char symbol, int health, int attack, int speed, int defen
 
 int killMonster(Monster* monster)
 {
-	mvprintw(monster->position->y, monster->position->x, ".");
 	monster->alive = 0;
+	return 0;
 }
-
 
 //Spawn the monster randomly inside the room
 int setStartingPosition(Monster* monster, Room* room)
@@ -86,60 +95,126 @@ int setStartingPosition(Monster* monster, Room* room)
 	monster->position = malloc(sizeof(Coords));
 	monster->position->y = (rand() % (room->height-2)) + room->coords.y +2 ;
 	monster->position->x = (rand() % (room->width-2)) + room->coords.x +2 ;
-
-	mvprintw(monster->position->y, monster->position->x, monster->string);
 }
 
+//
 int moveMonsters(Level* level)
 {
 	int x;
+	int move = 0;
+
+
 	for(x=0; x<level->numberOfMonsters; x++)
 	{
 		if (level->monsters[x]->alive == 0)
 			continue;
 
-		mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, ".");
 		if(level->monsters[x]->pathfinding == PATHFINDING_RANDOM)
 		{
 			pathfindingRandom(level->monsters[x]->position);
 		}
+
 		else if(level->monsters[x]->pathfinding == PATHFINDING_SEEK)
 		{
-			pathfindingSeek(level->monsters[x]->position, level->user->position);
+			move = pathfindingSeek(level->monsters[x]->position, level->user->position);
 		}
-		mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, level->monsters[x]->string);
+
+		if(move == 2)
+		{
+			mvprintw(0, 0,"MORTAL COMBAT!!!", x);
+			refresh();
+			getch();
+			printFrame();
+		}
+		/*
+		//Check to see that if monster X has moved into the player
+		if((level->monsters[x]->position->x == level->user->position->x)
+		&& (level->monsters[x]->position->y == level->user->position->y))
+		{
+			// level->monsters[x]->position->x = tempx;
+			// level->monsters[x]->position->y = tempy;
+
+			mvprintw(0, 0,"PREPOSTEROUS!! %d !  ", x);
+			refresh();
+			getch();
+			printFrame();
+		}
+		*/
 	}
 	return 1;
 }
 
+int drawMonster(Monster* monster)
+{
+	mvprintw(monster->position->y, monster->position->x, monster->string);
+}
+
+//return 0 if coordinates (y1,x1) and (y2,x2) collide collide
+int checkCoordCollision(int y1, int x1, int y2, int x2)
+{
+	if(y1!=y2 || x1 != x2)
+	{
+		mvprintw(1,0,"(%d,%d)==(%d,%d)?: No  ", x1,y1,x2,y2);
+		refresh();
+		return 1;
+	}
+	else
+	{
+		mvprintw(1,0,"(%d,%d)==(%d,%d)?: Yes  ", x1,y1,x2,y2);
+		refresh();
+		return 0;
+	}
+}
+
+//Moves the coordinate/position on step closer to the destination,
+// returns 2 if monster catches player, -1 if monster can't move
 int pathfindingSeek(Coords* start, Coords* destination)
 {
 	//Take a step, if closer and empty --- store new coords
 
 	//step left
-	if((abs((start->x-1) - destination->x) < abs(start->x-destination->x)) && (mvinch(start->y, start->x-1) == '.'))
+	if((abs((start->x-1) - destination->x) < abs(start->x-destination->x))
+	/*&& (mvinch(start->y, start->x-1) == '.')*/) //Make sure it's a valid space
 	{
-		start->x = start->x-1;
+		if(checkCoordCollision(start->y,start->x-1,destination->y,destination->x))
+			start->x = start->x-1;
+		else
+			return 2;	//Combat time!
 	}
 	//step right
-	else if((abs((start->x+1) - destination->x) < abs(start->x-destination->x)) && (mvinch(start->y, start->x+1) == '.'))
+	else if((abs((start->x+1) - destination->x) < abs(start->x-destination->x))
+	/*&& (mvinch(start->y, start->x+1) == '.')*/)
 	{
-		start->x = start->x+1;
+		if(checkCoordCollision(start->y,start->x+1,destination->y,destination->x))
+			start->x = start->x+1;
+		else
+			return 2;	//Combat time!
 	}
 	//step down
-	else if((abs((start->y+1) - destination->y) < abs(start->y-destination->y)) && (mvinch(start->y+1, start->x) == '.'))
+	else if((abs((start->y+1) - destination->y) < abs(start->y-destination->y))
+	/*&& (mvinch(start->y+1, start->x) == '.')*/)
 	{
-		start->y = start->y+1;
+		if(checkCoordCollision(start->y+1,start->x,destination->y,destination->x))
+			start->y = start->y+1;
+		else
+			return 2;
 	}
 	//step up
-	else if((abs((start->y-1) - destination->y) < abs(start->y-destination->y)) && (mvinch(start->y-1, start->x) == '.'))
+	else if((abs((start->y-1) - destination->y) < abs(start->y-destination->y))
+	/*&& (mvinch(start->y-1, start->x) == '.')*/)
 	{
-		start->y = start->y-1;
+		if(checkCoordCollision(start->y-1,start->x,destination->y,destination->x))
+			start->y = start->y-1;
+		else
+			return 2;
 	}
 	else
+	{
 		return -1;
+	}
 }
 
+//Moves the coordinate/position one step in a 'random' direction
 int pathfindingRandom(Coords* position)
 {
 	int random = (rand()%5);
@@ -177,7 +252,8 @@ Monster* getMonsterAt(Coords position, Monster** monsters)
 	int x;
 	for(x=0;x<6;x++)
 	{
-		if((position.y  == monsters[x]->position->y) && (position.x  == monsters[x]->position->x))
+		if((position.y  == monsters[x]->position->y)
+		&& (position.x  == monsters[x]->position->x))
 			return monsters[x];
 	}
 }

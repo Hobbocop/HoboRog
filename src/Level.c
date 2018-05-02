@@ -16,10 +16,34 @@ Level * createLevel(int lvl)
 	newLevel->tiles=saveLevelPositions();
 	newLevel->user = playerSetUp();
 	placePlayer(newLevel->rooms, newLevel->user);
-
 	addMonsters(newLevel);
 
 	return newLevel;
+}
+
+void drawLevel(Level* level)
+{
+	int x, y, i;
+
+	//Print tiles
+	for(y = 1; y<GLOBAL_MAX_HEIGHT-1; y++)
+	{
+		for (x = 1; x<GLOBAL_MAX_WIDTH-1; x++)
+		{
+			mvaddch(y,x, level->tiles[y][x]);
+		}
+	}
+
+	//print monsters
+	for(i=0; i<level->numberOfMonsters; i++)
+	{
+		if(level->monsters[i]->alive)
+			drawMonster(level->monsters[i]);
+	}
+
+	//print player
+	drawPlayer(level->user);
+	move(level->user->position->y, level->user->position->x);
 }
 
 //Creates maps and and sends them to be drawn on the map

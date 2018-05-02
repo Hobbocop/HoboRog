@@ -26,48 +26,39 @@ int placePlayer(Room** rooms, Player* user)
 {
 	user->position->x = rooms[3]->coords.x+1;
 	user->position->y = rooms[3]->coords.y+1;
-
-	mvprintw(user->position->y, user->position->x, "@");
-	move(user->position->y, user->position->x);
 }
 
 //Moves the player character to the new x and y
 int playerMove(Coords newPosition, Player* user, char ** level)
 {
-
-	char buffer[8];
-
-	//level[user->position.y][user->position.x];
-
-	sprintf(buffer, "%c", level[user->position->y][user->position->x]);
-
-	mvprintw(user->position->y, user->position->x, buffer);
-
 	user->position->y = newPosition.y;
 	user->position->x = newPosition.x;
-
-	mvprintw(user->position->y, user->position->x, "@");
-	move(user->position->y, user->position->x);
 }
 
 //Increments the experience counter, also signals when levelup
-int addExp(Player* player, int xp)
+int addExp(Player* user, int xp)
 {
-	player->exp += xp;
-	if(xp>=5 && player->lvl==1)
-		levelUp(player);
+	user->exp += xp;
+	if(xp>=5 && user->lvl==1)
+		levelUp(user);
 	return 1;
 }
 
 //Increments the players level and stats accordingly
-int levelUp(Player* player)
+int levelUp(Player* user)
 {
 	//mvprintw(2,0, "Level up! Stats have been increased!");
-	player->attack++;
-	player->maxHp+=10;
-	player->hp = player->maxHp;
-	player->lvl++;
+	user->attack++;
+	user->maxHp+=10;
+	user->hp = user->maxHp;
+	user->lvl++;
 	return 1;
+}
+
+void drawPlayer(Player* user)
+{
+	mvprintw(user->position->y, user->position->x, "@");
+	move(user->position->y, user->position->x);
 }
 
 
@@ -134,7 +125,7 @@ int checkPosition(Coords newPosition, Level* level)
 			combat(user, getMonsterAt(newPosition, level->monsters), 1);
 			break;
 		default:
-			move(user->position->y, user->position->x);
+			//move(user->position->y, user->position->x);
 			break;
 	}
 }

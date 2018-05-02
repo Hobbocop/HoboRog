@@ -5,22 +5,23 @@
 int gameLoop()
 {
 	//Variables
-	int ch;
+	int ch = '\0';
 	Level * level;
 	Coords newPosition;
 
 	printFrame();
 	level = createLevel(1);
 	printGameHud(level);
-	move(level->user->position->y, level->user->position->x);
+	//move(level->user->position->y, level->user->position->x);
 
 	//Main game loop
-	while((ch = getch()) != 'q'){
+	while(ch != 'q'){
 		newPosition = handleInput(ch, level->user);
 		checkPosition(newPosition, level);
 		moveMonsters(level);
 		printGameHud(level);
-		move(level->user->position->y, level->user->position->x);
+		drawLevel(level);
+		//move(level->user->position->y, level->user->position->x);
 
 		if(level->user->hp <= 0){
 			clear();
@@ -29,26 +30,33 @@ int gameLoop()
 			return -1;
 		}
 
+		ch = getch();
+		//drawLevel(level);
 		refresh();
 	}
-
 }
 
 void menuLoop()
 {
-	int choice;
+	int choice, check;
 	char* choices[] = {"Start new Game", "Quit game", "Secret Option 3"};
 
-	//mainMenu(2, choices);
-
+	//Enter eternal loop to check main menu
 	while(TRUE){
 		choice = mainMenu(3, choices);
 
 		switch(choice){
+			//Start game has been pressed
 			case START_GAME:
-				gameLoop();
-				clear();
-				break;
+				//Game returns because player died, back to main menu
+				if(gameLoop()==-1){
+					clear();
+					break;
+				} else { //If player quit by himself, just exit
+					clear();
+					return;
+				}
+			//If quit game was chosen, just exit
 			case QUIT_GAME:
 				return;
 		}

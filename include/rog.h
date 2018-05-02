@@ -107,9 +107,9 @@ void printFrame();
 void printInnerFrame();
 int printGameHud(Level* level);
 
-
 //Level/Map functions - Level.c
 Level * createLevel(int lvl);
+void drawLevel(Level* level);
 Room** roomsSetup();
 char** saveLevelPositions();
 void connectDoors(Level* level);
@@ -125,8 +125,9 @@ int checkPosition(Coords newPosition, Level* level);
 Player* playerSetUp();
 int placePlayer(Room** rooms, Player* user);
 int playerMove(Coords newPosition, Player* user, char ** level);
-int addExp(Player* player, int xp);
-int levelUp(Player* player);
+int addExp(Player* user, int xp);
+int levelUp(Player* user);
+void drawPlayer(Player* user);
 
 //Monster functions - Monster.c
 int addMonsters(Level * level);
@@ -135,10 +136,10 @@ Monster* createMonster(char symbol, int health, int attack, int speed, int defen
 int killMonster(Monster* monster);
 int setStartingPosition(Monster* monster, Room* room);
 int moveMonsters(Level* level);
+int drawMonster(Monster* monster);
 int pathfindingSeek(Coords* start, Coords* destination);
 int pathfindingRandom(Coords* start);
 Monster* getMonsterAt(Coords position, Monster** monsters);
-
 
 //Combat functions - Combat.c
 int combat(Player* player, Monster* monster, int order);

@@ -20,7 +20,8 @@ int checkNeighbour(int y, int x)
 int addNeighbours(int** frontier, int frontierCount, int*** cameFrom, int y, int x)
 {
 	//North Neighbour
-	if(y > 0 && cameFrom[y-1][x][0] < 0 && checkNeighbour(y-1,x)) //There exist a unvisited neighbor to the north
+	//There exist a unvisited neighbor to the north
+	if(y > 0 && cameFrom[y-1][x][0] < 0 && checkNeighbour(y-1,x))
 	{
 		//Expand frontier by adding this element
 		addPositionYX(frontier, frontierCount, y-1, x);
@@ -34,7 +35,8 @@ int addNeighbours(int** frontier, int frontierCount, int*** cameFrom, int y, int
 	}
 
 	//South Neighbour
-	if(y < (GLOBAL_MAX_HEIGHT-1) && cameFrom[y+1][x][0] < 0 && checkNeighbour(y+1,x)) //There exist a unvisited neighbor to the south
+	//There exist a unvisited neighbor to the south
+	if(y < (GLOBAL_MAX_HEIGHT-1) && cameFrom[y+1][x][0] < 0 && checkNeighbour(y+1,x))
 	{
 		addPositionYX(frontier, frontierCount, y+1, x);
 		frontierCount++;
@@ -43,7 +45,8 @@ int addNeighbours(int** frontier, int frontierCount, int*** cameFrom, int y, int
 	}
 
 	//West Neighbour
-	if(x > 0 && cameFrom[y][x-1][0] < 0 && checkNeighbour(y,x-1)) //There exist a unvisited neighbor to the west
+	//There exist a unvisited neighbor to the west
+	if(x > 0 && cameFrom[y][x-1][0] < 0 && checkNeighbour(y,x-1))
 	{
 		addPositionYX(frontier, frontierCount, y, x-1);
 		frontierCount++;
@@ -52,7 +55,8 @@ int addNeighbours(int** frontier, int frontierCount, int*** cameFrom, int y, int
 	}
 
 	//East Neighbour
-	if(x < (GLOBAL_MAX_WIDTH-1) && cameFrom[y][x+1][0] < 0 && checkNeighbour(y,x+1)) //There exist a neighbor to the east
+	//There exist a neighbor to the east
+	if(x < (GLOBAL_MAX_WIDTH-1) && cameFrom[y][x+1][0] < 0 && checkNeighbour(y,x+1))
 	{
 		addPositionYX(frontier, frontierCount, y, x+1);
 		frontierCount++;
