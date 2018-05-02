@@ -6,11 +6,20 @@
 //Initializes pdcurses and sets up the screen.
 int screenSetUp()
 {
+	GLOBAL_MAX_HEIGHT = 25;
+	GLOBAL_MAX_WIDTH  = 100;
+
+	/*
+	GLOBAL_MAX_WIDTH = getmaxx();
+	GLOBAL_MAX_HEIGHT = getmaxy();
+	*/
 	initscr();
 	noecho();
+	keypad(stdscr, TRUE);
+
 	//printw("Welcome to HoboRogue (%d,%d) - Press q to quit\n", GLOBAL_MAX_WIDTH, GLOBAL_MAX_HEIGHT);
 
-	printFrame();
+	//printFrame();
 	refresh();
 
 	return 1;

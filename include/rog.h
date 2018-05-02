@@ -2,7 +2,7 @@
 #ifndef ROGUE_H
 #define ROGUE_H
 
-#include <curses.h>
+#include <ncurses/ncurses.h>
 #include <stdlib.h>
 #include <time.h>
 

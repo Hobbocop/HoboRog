@@ -1,17 +1,15 @@
 #include "rog.h"
+#include "mainMenu.h"
 
-//Main function
-int main()
+
+int gameLoop()
 {
 	//Variables
 	int ch;
 	Level * level;
 	Coords newPosition;
-	GLOBAL_MAX_HEIGHT = 25;
-	GLOBAL_MAX_WIDTH  = 100;
 
-	//Init stuff
-	screenSetUp();
+	printFrame();
 	level = createLevel(1);
 	printGameHud(level);
 	move(level->user->position->y, level->user->position->x);
@@ -23,10 +21,48 @@ int main()
 		moveMonsters(level);
 		printGameHud(level);
 		move(level->user->position->y, level->user->position->x);
+
+		if(level->user->hp <= 0){
+			clear();
+			mvprintw(1,1,"You have died, press any button to return to main menu");
+			getch();
+			return -1;
+		}
+
 		refresh();
 	}
 
-	//getch();
+}
+
+void menuLoop()
+{
+	int choice;
+	char* choices[] = {"Start new Game", "Quit game", "Secret Option 3"};
+
+	//mainMenu(2, choices);
+
+	while(TRUE){
+		choice = mainMenu(3, choices);
+
+		switch(choice){
+			case START_GAME:
+				gameLoop();
+				clear();
+				break;
+			case QUIT_GAME:
+				return;
+		}
+	}
+}
+
+//Main function
+int main()
+{
+	//Init stuff
+	screenSetUp();
+
+	menuLoop();
+
 	endwin();
 	return 0;
 }
