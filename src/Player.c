@@ -22,6 +22,17 @@ Player* playerSetUp()
 	return newPlayer;
 }
 
+void copyPlayerStats(Player* old, Player* new)
+{
+	new->hp = old->hp;
+	new->attack = 	old->attack;
+	new->defense = 	old->defense;
+	new->exp =		old->exp;
+	new->lvl =		old->lvl;
+	new->gold =		old->gold;
+	new->maxHp =	old->maxHp;
+}
+
 int placePlayer(Room** rooms, Player* user)
 {
 	user->position->x = rooms[0]->coords.x+1;
@@ -57,7 +68,9 @@ int levelUp(Player* user)
 
 void drawPlayer(Player* user)
 {
+	attron(A_BOLD);
 	mvprintw(user->position->y, user->position->x, "@");
+	attroff(A_BOLD);
 	move(user->position->y, user->position->x);
 }
 
@@ -75,6 +88,7 @@ Coords handleInput(int input, Player* user)
 		//Move up
 		case 'w':
 		case 'W':
+		case KEY_UP:
 			newPosition.y = user->position->y-1;
 			newPosition.x = user->position->x;
 			break;
@@ -82,6 +96,7 @@ Coords handleInput(int input, Player* user)
 		//Move left
 		case 'a':
 		case 'A':
+		case KEY_LEFT:
 			newPosition.y = user->position->y;
 			newPosition.x = user->position->x-1;
 			break;
@@ -89,6 +104,7 @@ Coords handleInput(int input, Player* user)
 		//Move down
 		case 's':
 		case 'S':
+		case KEY_DOWN:
 			newPosition.y = user->position->y+1;
 			newPosition.x = user->position->x;
 			break;
@@ -96,6 +112,7 @@ Coords handleInput(int input, Player* user)
 		//Move right
 		case 'd':
 		case 'D':
+		case KEY_RIGHT:
 			newPosition.y = user->position->y;
 			newPosition.x = user->position->x+1;
 			break;

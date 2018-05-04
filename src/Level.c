@@ -7,6 +7,7 @@
 //Create a struct for a lvl level allocating standard values
 Level * createLevel(int lvl)
 {
+	clear();
 	Level * newLevel;
 	newLevel = malloc(sizeof(Level));
 	newLevel->lvl = lvl;

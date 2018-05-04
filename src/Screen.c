@@ -50,6 +50,8 @@ void printFrame()
 	mvprintw(0, GLOBAL_MAX_WIDTH, "+");
 	mvprintw(GLOBAL_MAX_HEIGHT, 0, "+");
 
+	refresh();
+
 }
 
 void printInnerFrame()

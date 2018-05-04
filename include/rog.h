@@ -27,7 +27,7 @@ typedef struct Coords
 //Struct to keep track of player data and stats
 typedef struct Player
 {
-	Coords* position;
+	struct Coords* position;
 	int hp;
 	int attack;
 	int defense;
@@ -38,28 +38,41 @@ typedef struct Player
 	//Room * room;	// Keep track of room that player is in
 } Player;
 
-//Struct to keep track of room data (coords) and stats
-typedef struct Room
+//Struct to keep track of monster
+typedef struct Monster
 {
-	Coords coords;	//X and Y coords of the top left corner
-	//Coords** door;
-	int height;
-	int width;
-	int numberOfDoors;
-	struct Door** door;
-
-	// TODO - Create structs for monsters and items
-	//Monster** monsters;
-	//Item** items;
-} Room;
+	struct Coords* position;
+	char symbol;	//Represent what type of monstor
+	char string[2];
+	char* type;
+	int hp;
+	int attack;
+	int speed;		//Probably only going to be 1
+	int defense;
+	int pathfinding;//How does the monster use? 0 - Seeking, 1 - random
+	int alive;		//1-yes, 0-no
+	int exp;
+} Monster;
 
 //Struct to keep track of Doors, basically two Coords
 typedef struct Door
 {
 	int connected;
-	Coords entrance;
-	Coords exit;
+	struct Coords entrance;
+	struct Coords exit;
 } Door;
+
+//Struct to keep track of room data (coords) and stats
+typedef struct Room
+{
+	struct Coords coords;	//X and Y coords of the top left corner
+	//Coords** door;
+	int height;
+	int width;
+	int numberOfDoors;
+	struct Door** door;
+	//Item** items;
+} Room;
 
 //Struct to keep track of level data (rooms) and stats
 typedef struct level
@@ -73,21 +86,13 @@ typedef struct level
 	struct Player* user;
 } Level;
 
-//Struct to keep track of monster
-typedef struct Monster
+//Struct to keep track of gamestate
+typedef struct gameSet
 {
-	Coords* position;
-	char symbol;	//Represent what type of monstor
-	char string[2];
-	char* type;
-	int hp;
-	int attack;
-	int speed;		//Probably only going to be 1
-	int defense;
-	int pathfinding;//How does the monster use? 0 - Seeking, 1 - random
-	int alive;		//1-yes, 0-no
-	int exp;
-} Monster;
+	struct level* levels[10];
+	int currentLevel;
+	int maxLevel;
+} gameSet;
 
 /*#############################################################################
 #	GLOBAL VARIABLES
@@ -107,6 +112,13 @@ void printFrame();
 void printInnerFrame();
 int printGameHud(Level* level);
 
+//Game functions - game.c
+void generateFirstLevel(gameSet* game);
+void generateNextLevel(gameSet* game);
+void render(gameSet * game);
+int gameLoop(gameSet* game);
+void menuLoop();
+
 //Level/Map functions - Level.c
 Level * createLevel(int lvl);
 void drawLevel(Level* level);
@@ -124,6 +136,7 @@ int drawRoom(Room* room);
 Coords handleInput(int input, Player* user);
 int checkPosition(Coords newPosition, Level* level);
 Player* playerSetUp();
+void copyPlayerStats(Player* old, Player* new);
 int placePlayer(Room** rooms, Player* user);
 int playerMove(Coords newPosition, Player* user, char ** level);
 int addExp(Player* user, int xp);

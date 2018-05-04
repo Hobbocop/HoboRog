@@ -44,6 +44,9 @@ Monster * selectMonster(int floorLevel)
 			monsterType = (rand()%2) + 2;
 			break;
 		case 6:
+		case 7:
+		case 8:
+		case 9:
 			monsterType = 3;
 			break;
 	}

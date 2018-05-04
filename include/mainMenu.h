@@ -3,7 +3,7 @@
 
 #include <ncurses/menu.h>
 
-enum {START_GAME, QUIT_GAME};
+enum {START_GAME, CONTINUE_GAME, QUIT_GAME};
 
 void closeMenu(int numberItems, MENU* menu, ITEM** items);
 int mainMenu(int numberItems, char * choices[]);
