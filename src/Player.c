@@ -24,8 +24,8 @@ Player* playerSetUp()
 
 int placePlayer(Room** rooms, Player* user)
 {
-	user->position->x = rooms[3]->coords.x+1;
-	user->position->y = rooms[3]->coords.y+1;
+	user->position->x = rooms[0]->coords.x+1;
+	user->position->y = rooms[0]->coords.y+1;
 }
 
 //Moves the player character to the new x and y

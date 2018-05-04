@@ -117,10 +117,7 @@ int moveMonsters(Level* level)
 
 		if(move == 2)
 		{
-			mvprintw(0, 0,"MORTAL COMBAT!!!", x);
-			refresh();
-			getch();
-			printFrame();
+			combat(level->user, level->monsters[x], 0);
 		}
 	}
 	return 1;
