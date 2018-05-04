@@ -28,14 +28,19 @@ int combat(Player* player, Monster* monster, int order)
 	{
 		player->hp -= monster->attack;
 		//Player retaliates if healt > 0
-		if(player->hp)
+		if(player->hp>0)
 		{
 			monster->hp -= player->attack;
+			if(monster->hp<=0)
+			{
+				killMonster(monster);
+				addExp(player, monster->exp);
+			}
 		}
 	}
 	//mvprintw(1,0,"Hit %s for %d damage, remaining hp: %d ",
 	//monster->type, player->attack, monster->hp);
-	move(player->position->y, player->position->x);
+	//move(player->position->y, player->position->x);
 
 	return 1;
 }

@@ -138,6 +138,8 @@ int killMonster(Monster* monster);
 int setStartingPosition(Monster* monster, Room* room);
 int moveMonsters(Level* level);
 int drawMonster(Monster* monster);
+int checkCoordCollision(int y1, int x1, int y2, int x2);
+int checkVicinity(Coords* pos1, Coords* pos2, int dis);
 int pathfindingSeek(Coords* start, Coords* destination, char ** tiles);
 int pathfindingRandom(Coords* position, Coords* target, char ** tiles);
 Monster* getMonsterAt(Coords position, Monster** monsters);

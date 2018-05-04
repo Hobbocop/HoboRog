@@ -129,54 +129,73 @@ int drawMonster(Monster* monster)
 	mvprintw(monster->position->y, monster->position->x, monster->string);
 }
 
-//return 0 if coordinates (y1,x1) and (y2,x2) collide collide
+//return 0 if coordinates (y1,x1) and (y2,x2) collide
 int checkCoordCollision(int y1, int x1, int y2, int x2)
 {
-	return (y1!=y2 || x1 != x2);
+	return (y1!=y2 || x1!=x2);
+}
+
+//Returns true if the coordinate2 is Dis distance away from coordinate 1
+int checkVicinity(Coords* pos1, Coords* pos2, int dis)
+{
+	int res;
+	//Currently only supports distances of 1, will add distances of 2 later
+	//Might do it recursively
+	if(dis > 1)
+		res =  FALSE;
+	//Check to see if the coords collide
+	//North
+	else if(checkCoordCollision(pos1->y-1, pos1->x, pos2->y, pos2->x)==FALSE)
+		res =  TRUE;
+	//South
+	else if(checkCoordCollision(pos1->y+1, pos1->x, pos2->y, pos2->x)==FALSE)
+		res =  TRUE;
+	//West
+	else if(checkCoordCollision(pos1->y, pos1->x-1, pos2->y, pos2->x)==FALSE)
+		res =  TRUE;
+	//East
+	else if(checkCoordCollision(pos1->y, pos1->x+1, pos2->y, pos2->x)==FALSE)
+		res =  TRUE;
+	//The coordinates were not in the vicinity of distance 1
+	else
+		res =  FALSE;
+
+	return res;
 }
 
 //Moves the coordinate/position on step closer to the destination,
 // returns 2 if monster catches player, -1 if monster can't move
 int pathfindingSeek(Coords* start, Coords* destination, char ** tiles)
 {
-	//Take a step, if closer and empty --- store new coords
+	//Before moving, check vicinity to see if player is there, if so - attack
+	if(checkVicinity(start, destination, 1))
+		return 2;
 
+	//Take a step, if closer and valid move --- store new coords
 	//step left
-	if((abs((start->x-1) - destination->x) < abs(start->x-destination->x))
+	else if((abs((start->x-1) - destination->x) < abs(start->x-destination->x))
 	&& validTileMove(start->y,start->x-1, tiles)) //Make sure it's a valid space
 	{
-		if(checkCoordCollision(start->y,start->x-1,destination->y,destination->x))
-			start->x = start->x-1;
-		else
-			return 2;	//Combat time!
+		start->x = start->x-1;
 	}
 	//step right
 	else if((abs((start->x+1) - destination->x) < abs(start->x-destination->x))
 	&& validTileMove(start->y,start->x+1, tiles))
 	{
-		if(checkCoordCollision(start->y,start->x+1,destination->y,destination->x))
-			start->x = start->x+1;
-		else
-			return 2;	//Combat time!
+		start->x = start->x+1;
 	}
 	//step down
 	else if((abs((start->y+1) - destination->y) < abs(start->y-destination->y))
 	&& validTileMove(start->y+1,start->x, tiles)
 	/*&& (mvinch(start->y+1, start->x) == '.')*/)
 	{
-		if(checkCoordCollision(start->y+1,start->x,destination->y,destination->x))
-			start->y = start->y+1;
-		else
-			return 2;
+		start->y = start->y+1;
 	}
 	//step up
 	else if((abs((start->y-1) - destination->y) < abs(start->y-destination->y))
 	&& validTileMove(start->y-1,start->x, tiles))
 	{
-		if(checkCoordCollision(start->y-1,start->x,destination->y,destination->x))
-			start->y = start->y-1;
-		else
-			return 2;
+		start->y = start->y-1;
 	}
 	else
 	{	//Could not make a valid move, stuck against a wall
